@@ -25,6 +25,17 @@ GBaby attacks this at every layer:
 | **GStack** | Specialized agent roles | **Smarter per token** — CEO/QA/eng-manager lens means less back-and-forth |
 | **TurboQuant** | 3-bit KV cache compression | **6x less GPU memory** — longer contexts on cheaper hardware |
 
+### The open-source frontier is here
+
+Three Chinese labs dropped three frontier models in eight days. They're not "catching up" anymore — they're leading benchmarks and shipping at a fraction of the cost:
+
+| Model | What it proved | Cost (API) | Available at |
+|---|---|---|---|
+| **[Kimi K2.6](https://platform.kimi.ai)** | #1 on SWE-Bench Pro (58.6%), beating GPT-5.4 and Claude Opus 4.6 on real coding tasks | $0.60/M in, $2.80/M out | [Moonshot API](https://platform.kimi.ai), [OpenRouter](https://openrouter.ai/moonshotai/kimi-k2.6) |
+| **[DeepSeek V4](https://api-docs.deepseek.com)** | Codeforces 3206 (beats GPT-5.4), near-frontier at 1/6th the price of Opus 4.7 | $0.14/M in, $0.28/M out (Flash) | [DeepSeek API](https://api-docs.deepseek.com), [Together AI](https://www.together.ai) |
+| **[Qwen 3.6 27B](https://huggingface.co/Qwen/Qwen3.6-27B)** | Ties Claude 4.5 Opus from an 18GB laptop. Dense 27B beats 397B MoE models. | **Free (local)** | [Ollama](https://ollama.com/library/qwen3.6), [HuggingFace](https://huggingface.co/Qwen/Qwen3.6-27B) |
+| **[Llama 4 Maverick](https://www.llama.com/models/llama-4/)** | 400B params, 17B active, 1M context window. Meta's best open model. | $0.20/M in, $0.60/M out | [Together AI](https://www.together.ai), [Groq](https://groq.com) (Scout), [Fireworks](https://fireworks.ai) |
+
 ### The actual math
 
 | Setup | Cost per session | Monthly (20/day) | vs. baseline |
@@ -32,12 +43,14 @@ GBaby attacks this at every layer:
 | Claude Sonnet (raw) | $0.50 | $300 | — |
 | Claude Sonnet + Graphify | $0.01 | $6 | **98% cheaper** |
 | Claude Haiku + Graphify | $0.001 | $0.60 | **99.8% cheaper** |
+| Kimi K2.6 + Graphify | $0.0007 | $0.42 | **99.9% cheaper** |
 | DeepSeek V4 Flash + Graphify | $0.0004 | $0.24 | **99.9% cheaper** |
+| Llama 4 Maverick + Graphify | $0.0003 | $0.18 | **99.9% cheaper** |
 | Qwen 3.6 27B (local) + GBaby | $0.00002 | $0.01 | **~free** |
 
 That's not a typo on the last row. Two hundred-thousandths of a cent per session. A frontier-quality model that ties Claude 4.5 Opus, running on $800 of consumer GPUs, reading a knowledge graph instead of raw files.
 
-**The bottom line:** GBaby turns a $300/month AI coding habit into a $6/month one on the same model — or effectively free if you go open-source.
+**The bottom line:** GBaby turns a $300/month AI coding habit into a $6/month one on the same model — or effectively free if you go open-source. Kimi K2.6 beats Claude on real coding benchmarks for $0.0007/session. DeepSeek V4 matches GPT-5.4 on competitive programming for $0.0004/session. And Qwen runs on your laptop for nothing.
 
 And this is before TurboQuant is battle-tested. When the compression layer is validated, self-hosted setups get 6x more context on the same GPU — meaning the models that already run on your laptop will handle codebases 6x larger without upgrading hardware.
 
@@ -128,24 +141,27 @@ Here's what it actually costs to use GBaby across different providers. Prices ar
 
 | Provider | Model | Input | Output | TurboQuant? | Notes |
 |---|---|---|---|---|---|
-| **DeepSeek** | V4 Flash | **$0.14** | **$0.28** | On vLLM: Yes | **21x cheaper than Sonnet.** 1M context. Beats GPT-5.4. |
-| **DeepSeek** | V4 Pro | $1.74 | $3.48 | On vLLM: Yes | Largest open-weight model (1.1T). Frontier quality. |
-| **Moonshot** | Kimi K2.6 | $0.60 | $2.80 | On vLLM: Yes | #1 on SWE-Bench. Cache hits drop input to $0.10/M. |
-| **Groq** | Llama 3.3 70B | $0.59 | $0.79 | No (custom LPU) | Fastest inference (800 tok/s). NVIDIA-acquired. |
-| **Groq** | Llama 3.1 8B | $0.05 | $0.08 | No (custom LPU) | Cheapest hosted option |
-| **Together AI** | Llama 3.3 70B | $0.88 | $0.88 | vLLM-based | TurboQuant when vLLM merges it |
-| **Together AI** | Llama 4 Maverick | $0.27 | $0.85 | vLLM-based | Newest Llama |
-| **Fireworks** | Llama 3.3 70B | $0.90 | $0.90 | vLLM-based | 99.8% uptime |
+| **[DeepSeek](https://api-docs.deepseek.com)** | V4 Flash | **$0.14** | **$0.28** | On vLLM: Yes | **21x cheaper than Sonnet.** 1M context. Codeforces 3206, beats GPT-5.4. |
+| **[DeepSeek](https://api-docs.deepseek.com)** | V4 Pro | $1.74 | $3.48 | On vLLM: Yes | Near-frontier at 1/6th the cost of Opus 4.7. Largest open-weight (1.1T). |
+| **[Moonshot](https://platform.kimi.ai)** | Kimi K2.6 | $0.60 | $2.80 | On vLLM: Yes | **#1 SWE-Bench Pro** (58.6%), beat GPT-5.4 and Claude Opus 4.6 on real coding. Cache hits: $0.10/M. |
+| **[Meta](https://www.llama.com/models/llama-4/)** | Llama 4 Maverick | $0.20 | $0.60 | On vLLM: Yes | 400B params, 17B active, **1M context**. Best open model from Meta. |
+| **[Meta](https://www.llama.com/models/llama-4/)** | Llama 4 Scout | $0.11 | $0.34 | On vLLM: Yes | 272B params, 17B active, 512K context. Lighter, cheaper. |
+| **[Groq](https://groq.com)** | Llama 3.3 70B | $0.59 | $0.79 | No (custom LPU) | Fastest inference (800 tok/s). NVIDIA-acquired. |
+| **[Groq](https://groq.com)** | Llama 4 Scout | $0.11 | $0.34 | No (custom LPU) | Llama 4 on Groq hardware. |
+| **[Together AI](https://www.together.ai)** | Llama 4 Maverick | $0.27 | $0.85 | vLLM-based | TurboQuant when vLLM merges it |
+| **[Fireworks](https://fireworks.ai)** | Llama 3.3 70B | $0.90 | $0.90 | vLLM-based | 99.8% uptime |
 
 ### Self-hosted (TurboQuant now)
 
 | Setup | Model | Cost/M tok | TurboQuant? | Notes |
 |---|---|---|---|---|
 | **vLLM on H200** | DeepSeek V4 Flash | ~$0.10 | **Yes** | Fits on single H200. 1M context. |
+| **vLLM on H100** | Llama 4 Maverick | ~$0.15 | **Yes** | 17B active params = efficient. 1M context. |
+| **vLLM on H100** | Kimi K2.6 (INT4) | ~$0.20 | **Yes** | INT4 quantization: 4xH100 is enough. #1 SWE-Bench Pro. |
 | **vLLM on H100** | Llama 70B | ~$0.18 | **Yes** | 580 tok/s. Break-even at ~16M tok/day. |
-| **vLLM on 8xH100** | Kimi K2.6 | ~$0.30 | **Yes** | INT4 quantization: 4xH100 is enough. |
 | **vLLM on A100** | Llama 70B | ~$0.42 | **Yes** | Still 60-80% cheaper than frontier APIs |
 | **Consumer GPUs** | Qwen 3.6 27B | **~$0.01** | **Yes** | **Ties Claude 4.5 Opus. Runs on $800 of GPUs.** |
+| **Consumer GPUs** | Llama 4 Scout | ~$0.05 | **Yes** | 17B active params. Fits on 48GB+ consumer cards. |
 | **llama.cpp** | Llama 70B | ~$0.10 | **Yes (TQ3)** | 43K context on consumer GPUs |
 | **Ollama (local)** | Any GGUF | **$0.00** | Partial | Free. Runs on your laptop. |
 
