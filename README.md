@@ -38,6 +38,18 @@ Three Chinese labs dropped three frontier models in eight days. They're not "cat
 
 > **Note on TurboQuant:** None of these cloud APIs offer TurboQuant as a user-facing feature today. TurboQuant is a server-side GPU optimization — it was [merged into stock vLLM](https://github.com/vllm-project/vllm/issues/38171) on April 15, 2026, and providers like Together AI and Fireworks run vLLM under the hood. When they flip the flag, you benefit indirectly (cheaper pricing, longer context) — but you can't configure it yourself through their API. To *directly control* TurboQuant, you self-host (vLLM, RunPod, llama.cpp). The cost savings above come from **Graphify's 49x token reduction**, which works with every provider right now, no TurboQuant needed.
 
+> **"Does my client need to speak TurboQuant?"** No. TurboQuant operates entirely inside the server's GPU memory during inference. Your client (Claude Code, OpenCode, Aider) sends normal tokens over a normal API and gets normal tokens back. TurboQuant compresses the model's *internal working memory* (KV cache) while it's thinking — the client never sees it. The API contract is identical with or without TurboQuant. That's why cloud providers can adopt it silently without breaking any client, and why GBaby's `[provider]` config is just a standard OpenAI-compatible endpoint URL.
+>
+> ```
+> Client  ──── normal tokens ────▶  Server (vLLM)
+>                                     │
+>                                     │ KV cache compressed
+>                                     │ FP16 → 3-bit in GPU VRAM
+>                                     │ (invisible to client)
+>                                     │
+> Client  ◀── normal response ────  Server
+> ```
+
 ### The actual math
 
 | Setup | Cost per session | Monthly (20/day) | vs. baseline |
