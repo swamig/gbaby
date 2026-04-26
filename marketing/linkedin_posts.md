@@ -13,7 +13,7 @@ GBaby takes 4 open-source projects and wires them into one stack:
 - GStack (Garry Tan's 23-agent coding team)
 - GBrain (persistent AI memory across sessions)
 - Graphify (49x fewer tokens per query)
-- TurboQuant (Google's 6x KV cache compression, in Rust)
+- TurboQuant (Google DeepMind's 6x KV cache compression, in Rust)
 
 Apart, they're research projects.
 Together, they're a full AI engineering team.
@@ -31,6 +31,18 @@ Not $1. Not $0.01. A thousandth of a cent.
 While OpenAI and Anthropic fight over $20/month subscriptions, the open-source stack quietly made AI coding free.
 
 The monster is alive: github.com/swamig/gbaby
+
+Fair warning: the full TurboQuant-compressed stack only works in specific setups today — self-hosted vLLM, RunPod Serverless, or llama.cpp. Cloud APIs like Anthropic and Google haven't adopted it yet. But Graphify's 49x token reduction works everywhere, right now, with any provider.
+
+Huge thanks to the giants whose work made this Frankenstein possible:
+- @GarryTan for GStack and GBrain — the productivity system that inspired this whole thing
+- @GoogleDeepMind for TurboQuant — the compression breakthrough that makes the economics work
+- @ShrutiGandhi at @ArrayVentures — whose post about 3 Chinese labs dropping 3 frontier models in 8 days was the spark that made me realize: the models are here, the tools are here, someone just needs to stitch them together
+- @SafiShamsi for Graphify — the knowledge graph that makes agents actually understand code
+
+Mary Shelley would be proud. The monster is alive.
+
+#OpenSource #AI #DevTools #GBaby
 
 ---
 
@@ -72,6 +84,12 @@ Open source. MIT license. No lock-in.
 
 github.com/swamig/gbaby
 
+Note: the full TurboQuant compression only works on self-hosted vLLM, RunPod, or llama.cpp today. Cloud APIs haven't adopted it yet. But Graphify's 49x token savings work with ANY provider right now.
+
+Inspired by @GarryTan's GStack/GBrain, @GoogleDeepMind's TurboQuant, and @ShrutiGandhi at @ArrayVentures — whose post about Chinese labs shipping 3 frontier models in 8 days lit the fuse. Standing on the shoulders of Frankensteins.
+
+#AIcoding #OpenSource #DevTools
+
 ---
 
 ## Post 3: The Industry Take
@@ -94,7 +112,7 @@ Your AI reads your files one at a time. It forgets between sessions. It doesn't 
 
 That's the real cost. Not tokens. Context.
 
-So I built GBaby. A Frankenstein that gives any AI coding agent:
+So I built GBaby — a Frankenstein that gives any AI coding agent:
 
 1. Eyes (Graphify) - reads your codebase as a knowledge graph, not raw files
 2. Memory (GBrain) - remembers decisions, people, context across sessions
@@ -108,6 +126,26 @@ One install: npx gbaby setup
 
 github.com/swamig/gbaby
 
+Where the full stack works today:
+- Self-hosted vLLM (CUDA) — 6x KV compression on NVIDIA GPUs
+- RunPod Serverless — hosted vLLM, pay per millisecond, scales to zero
+- llama.cpp + TurboQuant — consumer GPUs, 43K context
+- Apple Silicon via Metal — native acceleration on M-series Macs
+
+Cloud APIs (Anthropic, Google, OpenAI) haven't adopted TurboQuant yet. But Graphify's 49x token reduction works with ANY provider right now.
+
+Got a CUDA GPU or Apple Silicon Mac? I'd love help testing the acceleration paths. Running low on GPU credits and API budgets — if you want to contribute test runs or credits, DM me or see the tip jar in the repo.
+
+This wouldn't exist without the people who built the parts:
+@GarryTan — GStack and GBrain changed how I think about AI productivity
+@GoogleDeepMind — TurboQuant is the most underrated paper of 2026
+@ShrutiGandhi at @ArrayVentures — whose post about 3 Chinese labs shipping 3 frontier models in 8 days was the catalyst. The models are here. Someone just needed to wire them together.
+@SafiShamsi — Graphify is the unsung hero of token economics
+
+The Frankenstein is their baby. I just stitched it together.
+
+#AI #OpenSource #DevTools #GBaby
+
 ---
 
 ## Post 4: The Builder's Story
@@ -120,11 +158,11 @@ Last week I asked myself a stupid question:
 
 I wasn't kidding.
 
-Garry's GStack (23 AI agent roles) and GBrain (persistent memory) are incredible for Claude Code productivity. He's averaging 10,000 lines of code per week with them.
+@GarryTan's GStack (23 AI agent roles) and GBrain (persistent memory) are incredible for Claude Code productivity. He's averaging 10,000 lines of code per week with them.
 
-Google's TurboQuant paper compresses LLM memory by 6x with zero accuracy loss.
+@GoogleDeepMind's TurboQuant paper compresses LLM memory by 6x with zero accuracy loss.
 
-Graphify builds a knowledge graph of your codebase that cuts tokens by 49x.
+@SafiShamsi's Graphify builds a knowledge graph of your codebase that cuts tokens by 49x.
 
 Each one is great alone. But they were never designed to work together.
 
@@ -140,9 +178,24 @@ Windows? Mac? Linux? It just works.
 
 I called it GBaby because that's exactly what it is. The offspring of four open-source parents who never met.
 
+The hardware advantage:
+- NVIDIA GPU? CUDA auto-detected, fused TurboQuant kernels. 6x KV compression.
+- Apple Silicon? Metal compute shaders. Native M-series acceleration.
+- Intel/AMD CPU? AVX2 SIMD. Still fast.
+
+Honest caveat: the full TurboQuant stack works on self-hosted vLLM, RunPod Serverless, and llama.cpp today. Cloud APIs haven't adopted it yet. But Graphify's 49x savings work with ANY provider right now.
+
+I need help testing: low on GPU credits and running this solo. Got a CUDA rig or M-series Mac? DM me. Or toss a few bucks at the tip jar in the repo for API credits.
+
+Special thanks to @ShrutiGandhi at @ArrayVentures — her post about 3 Chinese labs shipping 3 frontier models in 8 days was the spark. The models are here. The tools are here. Sometimes the innovation isn't building something new. It's having the audacity to stitch them together.
+
+Mary Shelley understood: the monster isn't the scary part. It's what the monster can DO.
+
 And the monster is alive.
 
 github.com/swamig/gbaby
+
+#AI #OpenSource #Frankenstein #DevTools #GBaby #CUDA #AppleSilicon
 
 ---
 
@@ -160,10 +213,20 @@ What changed:
 - KV cache compression went mainstream (6x, zero accuracy loss)
 - Someone stitched it all together (hi)
 
+GBaby = @GarryTan's brain + @GoogleDeepMind's compression + @SafiShamsi's graph + a Frankenstein mentality.
+
+Sparked by @ShrutiGandhi at @ArrayVentures — her post about Chinese labs shipping 3 frontier models in 8 days made me realize: the models are here. Wire the tools together.
+
+Full TurboQuant works on: self-hosted vLLM (CUDA), RunPod Serverless, llama.cpp, Apple Silicon (Metal). Cloud APIs: not yet. Graphify's 49x savings: works everywhere.
+
+Need help: low on GPU credits. If you have CUDA or Apple Silicon hardware and want to test, DM me. Tip jar in the repo.
+
 One install: npx gbaby setup
 One repo: github.com/swamig/gbaby
 
 The monster is alive.
+
+#AI #DevTools #OpenSource #GBaby #CUDA #AppleSilicon
 
 ---
 
@@ -186,13 +249,13 @@ That last number isn't a typo. Two hundred-thousandths of a cent.
 
 How?
 
-1. Graphify indexes your codebase into a knowledge graph. The agent reads 1,700 tokens instead of 123,000. That's a 49-71x reduction.
+1. Graphify (@SafiShamsi) indexes your codebase into a knowledge graph. The agent reads 1,700 tokens instead of 123,000. That's a 49-71x reduction.
 
-2. TurboQuant (Google, ICLR 2026) compresses the KV cache to 3 bits. Same accuracy. 6x less GPU memory. Fits longer contexts on cheaper hardware.
+2. TurboQuant (@GoogleDeepMind, ICLR 2026) compresses the KV cache to 3 bits. Same accuracy. 6x less GPU memory. Fits longer contexts on cheaper hardware.
 
-3. GBrain persists knowledge between sessions. The agent doesn't re-discover your architecture every time.
+3. GBrain (@GarryTan) persists knowledge between sessions. The agent doesn't re-discover your architecture every time.
 
-4. GStack gives the agent specialized roles (CEO, eng manager, QA). Each reads the graph and memory, not raw files.
+4. GStack (@GarryTan) gives the agent specialized roles (CEO, eng manager, QA). Each reads the graph and memory, not raw files.
 
 The stack is called GBaby. It's open source, MIT licensed, and takes 30 seconds to install.
 
@@ -203,4 +266,17 @@ Auto-detects your GPU: CUDA, Metal, or CPU.
 
 One command: npx gbaby setup
 
+Hardware acceleration:
+- NVIDIA CUDA: auto-detected, fused TurboQuant kernels
+- Apple Silicon Metal: native M-series compute shaders
+- CPU (AVX2/NEON): fallback that still performs
+
+Honest caveat: full TurboQuant compression works on self-hosted vLLM, RunPod, and llama.cpp today. Cloud APIs haven't adopted it. Graphify's 49x token savings work with any provider right now.
+
+Need testers: I'm building solo and running low on GPU credits. If you have CUDA or Apple Silicon hardware, I'd love help benchmarking. API credit donations welcome too — tip jar in the repo.
+
+Thank you @GarryTan, @GoogleDeepMind, @SafiShamsi for the open-source foundation. And @ShrutiGandhi at @ArrayVentures — her post about 3 Chinese labs dropping 3 frontier models in 8 days was the catalyst. The Frankenstein needed a spark. That post was it.
+
 github.com/swamig/gbaby
+
+#AI #DevTools #OpenSource #TurboQuant #GBaby #CUDA #AppleSilicon
