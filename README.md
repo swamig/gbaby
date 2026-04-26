@@ -36,6 +36,8 @@ Three Chinese labs dropped three frontier models in eight days. They're not "cat
 | **[Qwen 3.6 27B](https://huggingface.co/Qwen/Qwen3.6-27B)** | Ties Claude 4.5 Opus from an 18GB laptop. Dense 27B beats 397B MoE models. | **Free (local)** | [Ollama](https://ollama.com/library/qwen3.6), [HuggingFace](https://huggingface.co/Qwen/Qwen3.6-27B) |
 | **[Llama 4 Maverick](https://www.llama.com/models/llama-4/)** | 400B params, 17B active, 1M context window. Meta's best open model. | $0.20/M in, $0.60/M out | [Together AI](https://www.together.ai), [Groq](https://groq.com) (Scout), [Fireworks](https://fireworks.ai) |
 
+> **Note on TurboQuant:** None of these cloud APIs offer TurboQuant as a user-facing feature today. TurboQuant is a server-side GPU optimization — it was [merged into stock vLLM](https://github.com/vllm-project/vllm/issues/38171) on April 15, 2026, and providers like Together AI and Fireworks run vLLM under the hood. When they flip the flag, you benefit indirectly (cheaper pricing, longer context) — but you can't configure it yourself through their API. To *directly control* TurboQuant, you self-host (vLLM, RunPod, llama.cpp). The cost savings above come from **Graphify's 49x token reduction**, which works with every provider right now, no TurboQuant needed.
+
 ### The actual math
 
 | Setup | Cost per session | Monthly (20/day) | vs. baseline |
