@@ -9,6 +9,29 @@ bits = 3                # 2-8, lower = more compression, 3 is the sweet spot
 projections = 64        # randomized projection count
 seed = 42               # deterministic reproducibility
 
+[provider]
+# LLM provider configuration.
+# GBaby works with any OpenAI-compatible API endpoint.
+#
+# Examples:
+#   Claude (default):   platform = "claude"
+#   Self-hosted vLLM:   platform = "openai-compatible", base_url = "http://localhost:8000/v1"
+#   Together AI:        platform = "openai-compatible", base_url = "https://api.together.xyz/v1"
+#   Fireworks:          platform = "openai-compatible", base_url = "https://api.fireworks.ai/inference/v1"
+#   Ollama:             platform = "openai-compatible", base_url = "http://localhost:11434/v1"
+#
+# For self-hosted vLLM with TurboQuant, start your server with:
+#   vllm serve meta-llama/Llama-3.1-70B --kv-cache-dtype turboquant_k3v4
+#
+# Then point GBaby at it:
+#   platform = "openai-compatible"
+#   base_url = "http://localhost:8000/v1"
+#   model = "meta-llama/Llama-3.1-70B"
+platform = "claude"
+# base_url = ""
+# model = ""
+# api_key_env = "OPENAI_API_KEY"   # env var name containing your API key
+
 [brain]
 # GBrain knowledge base path (relative to project root)
 path = "brain"

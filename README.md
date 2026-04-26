@@ -107,11 +107,63 @@ The setup auto-detects your hardware:
 - **Intel / AMD CPU?** → Builds with AVX2 SIMD (still fast)
 - **Windows?** → PowerShell-native with `winget` install hints
 
+## Use TurboQuant Today (Self-Hosted)
+
+You don't have to wait for Anthropic or Google. TurboQuant is already in vLLM and llama.cpp. Run an open-source model with TurboQuant compression and point GBaby at it:
+
+**Option 1: vLLM + TurboQuant** (recommended for GPU servers)
+```bash
+# Start vLLM with TurboQuant KV cache compression
+pip install vllm
+vllm serve meta-llama/Llama-3.1-70B --kv-cache-dtype turboquant_k3v4
+
+# In gbaby.toml:
+# [provider]
+# platform = "openai-compatible"
+# base_url = "http://localhost:8000/v1"
+# model = "meta-llama/Llama-3.1-70B"
+```
+
+**Option 2: llama.cpp + TurboQuant** (runs on consumer hardware)
+```bash
+# Build llama.cpp with TurboQuant support
+# Serves 43K-token contexts on consumer GPUs where vanilla caps at 16K
+./llama-server -m model.gguf --kv-cache-type turbo3
+
+# Same config — point gbaby.toml at localhost
+```
+
+**Option 3: Ollama** (easiest local setup)
+```bash
+ollama serve
+# [provider]
+# platform = "openai-compatible"
+# base_url = "http://localhost:11434/v1"
+```
+
+**Option 4: Cloud providers running vLLM** (Together AI, Fireworks, etc.)
+```toml
+# These providers run vLLM under the hood.
+# As TurboQuant merges into vLLM mainline, they get it for free.
+[provider]
+platform = "openai-compatible"
+base_url = "https://api.together.xyz/v1"
+model = "meta-llama/Llama-3.1-70B-Instruct"
+api_key_env = "TOGETHER_API_KEY"
+```
+
+The beauty: GBaby's Graphify + GBrain + GStack layers work identically regardless of which provider you use. Swap the `[provider]` block, keep everything else.
+
 ## Configuration
 
 All settings live in `gbaby.toml`:
 
 ```toml
+[provider]
+platform = "claude"             # or "openai-compatible"
+# base_url = "http://localhost:8000/v1"
+# model = "meta-llama/Llama-3.1-70B"
+
 [quant]
 backend = "auto"    # "auto" | "cuda" | "metal" | "cpu"
 bits = 3            # 2-8, lower = more compression
