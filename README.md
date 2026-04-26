@@ -123,8 +123,31 @@ These prices are *before* GBaby's savings kick in:
 | **Best quality, don't care about cost** | Claude Code + Claude Sonnet + GBaby | ~$150-300/mo |
 | **Best quality, cost-conscious** | Claude Code + Claude Haiku + GBaby (Graphify cuts tokens 49x) | ~$10-30/mo |
 | **Open-source maximalist** | OpenCode/Aider + Groq Llama 70B + GBaby | ~$5-15/mo |
+| **Full TurboQuant (hosted)** | OpenCode/Aider + RunPod Serverless vLLM + TQ + GBaby | ~$5-20/mo (scales to zero) |
+| **Full TurboQuant (own GPU)** | OpenCode/Aider + vLLM + TurboQuant + GBaby | GPU cost only (~$0.18/M tok) |
 | **Zero cost** | OpenCode/Aider + Ollama (local) + GBaby | **$0/mo** |
-| **Full TurboQuant stack** | OpenCode/Aider + self-hosted vLLM + TurboQuant + GBaby | GPU cost only (~$0.18/M tok) |
+
+### Hosted TurboQuant (no GPU management)
+
+You don't need to manage your own GPU to use TurboQuant. **[RunPod Serverless](https://www.runpod.io/product/serverless)** lets you deploy a vLLM endpoint with TurboQuant enabled, pay per millisecond, and scale to zero when idle:
+
+```bash
+# 1. Create a RunPod serverless endpoint with the vLLM template
+#    In the RunPod console: Serverless → Quick Deploy → vLLM
+#    Set the model and add --kv-cache-dtype turboquant_k3v4 to the args
+
+# 2. Point GBaby at it
+# gbaby.toml:
+# [provider]
+# platform = "openai-compatible"
+# base_url = "https://api.runpod.ai/v2/YOUR_ENDPOINT_ID/openai/v1"
+# model = "meta-llama/Llama-3.1-70B"
+# api_key_env = "RUNPOD_API_KEY"
+```
+
+**Pricing:** A100 at ~$0.0004/sec, H100 at ~$0.0012/sec. Scales to zero between sessions — you only pay when GBaby is actively working. A heavy coding day might cost $1-2.
+
+**Coming soon:** [Together AI](https://www.together.ai) and [Fireworks AI](https://fireworks.ai) both run vLLM under the hood. When TurboQuant merges into vLLM mainline, they'll get it automatically — at that point, Llama 70B at $0.88/M tok will also be TurboQuant-compressed, and the savings pass through to you.
 
 ## Platform Support
 
