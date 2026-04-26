@@ -1,0 +1,35 @@
+# GBaby unified configuration
+# The Frankenstein of AI Coding
+
+[quant]
+# Compression backend: "auto" | "cuda" | "metal" | "cpu"
+# "auto" detects CUDA -> Metal -> CPU at runtime
+backend = "auto"
+bits = 3                # 2-8, lower = more compression, 3 is the sweet spot
+projections = 64        # randomized projection count
+seed = 42               # deterministic reproducibility
+
+[brain]
+# GBrain knowledge base path (relative to project root)
+path = "brain"
+# Auto-sync cron interval (minutes), 0 to disable
+sync_interval = 30
+
+[stack]
+# GStack roles to activate
+roles = [
+  "ceo",
+  "eng-manager",
+  "designer",
+  "qa",
+  "release-manager",
+  "doc-engineer",
+]
+
+[graph]
+# Graphify knowledge graph settings
+auto_sync = true
+watch = true
+# File patterns to index
+include = ["**/*.rs", "**/*.ts", "**/*.tsx", "**/*.py", "**/*.md"]
+exclude = ["node_modules/**", "target/**", "dist/**", ".git/**"]

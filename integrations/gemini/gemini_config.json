@@ -1,0 +1,20 @@
+{
+  "systemInstruction": "You are using the GBaby stack. Before any task: read graph/GRAPH_REPORT.md for codebase structure, check brain/decisions/ for past decisions, and consult stack/roles/ for role-specific guidance. Persist important knowledge to brain/ using templates in brain/templates/.",
+  "tools": [
+    {
+      "name": "read_graph",
+      "description": "Read the Graphify knowledge graph report",
+      "command": "cat graph/GRAPH_REPORT.md"
+    },
+    {
+      "name": "sync_graph",
+      "description": "Re-sync the knowledge graph with current codebase",
+      "command": "npm run graph:sync"
+    },
+    {
+      "name": "doctor",
+      "description": "Check GBaby health",
+      "command": "bash scripts/doctor.sh"
+    }
+  ]
+}

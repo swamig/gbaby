@@ -1,0 +1,13 @@
+{
+  "$schema": "https://claude.ai/code/settings-schema.json",
+  "permissions": {
+    "allow": [
+      "Bash(npm run graph:*)",
+      "Bash(bash scripts/doctor.sh)",
+      "Read(brain/**)",
+      "Read(graph/**)",
+      "Read(stack/**)",
+      "Read(gbaby.toml)"
+    ]
+  }
+}

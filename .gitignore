@@ -1,0 +1,26 @@
+# Rust
+target/
+Cargo.lock
+
+# Node
+node_modules/
+package-lock.json
+
+# Graphify generated
+graph/GRAPH_REPORT.md
+graph/*.json
+
+# Brain (personal data — users should .gitignore or encrypt)
+# Uncomment these if your brain contains sensitive data:
+# brain/people/
+# brain/meetings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

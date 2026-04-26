@@ -1,0 +1,20 @@
+{
+  "name": "gbaby",
+  "version": "0.1.0",
+  "description": "The Frankenstein of AI Coding — GStack + GBrain + Graphify + TurboQuant",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "gbaby": "./cli.mjs"
+  },
+  "scripts": {
+    "setup": "node cli.mjs setup",
+    "doctor": "node cli.mjs doctor",
+    "graph:init": "npx graphify init",
+    "graph:sync": "npx graphify sync",
+    "graph:watch": "npx graphify sync --watch"
+  },
+  "dependencies": {
+    "graphify": "latest"
+  }
+}
