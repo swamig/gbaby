@@ -8,6 +8,8 @@ Four open-source projects. One stack. Your AI coding agent now has a brain (GBra
 
 **The monster is alive.**
 
+> **Alpha stage.** GBaby is under active development and testing. Graphify and GBrain/GStack integration work today. The TurboQuant compression layer (gbaby-quant) is scaffolded with CUDA/Metal/CPU fallback but hasn't been battle-tested end-to-end yet — we're waiting on GPU credits and hardware access to put it through its paces. If you have a CUDA rig or Apple Silicon Mac and want to help test, [DM me](https://linkedin.com/in/saumyagarg) or see the [Tip Jar](#tip-jar) to donate API/GPU credits. Contributions of any kind welcome.
+
 ---
 
 ## 30 Seconds to Alive
