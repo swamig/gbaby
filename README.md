@@ -52,17 +52,79 @@ Apart, they're research projects. Together, they multiply:
 | Agent capability | Single-role, one file at a time | Multi-role, graph-aware, memory-backed |
 | Hardware floor | Beefy GPU or expensive API | Runs on your Intel Mac |
 
-## AI Platform Support
+## AI Coding CLI Support
 
-| Platform | Status | Notes |
-|---|---|---|
-| **Claude Code** | **Actively tested** | Full integration — CLAUDE.md, skills, hooks, auto-graph |
-| **Gemini CLI** | Scaffolded | Config + role prompts ready; not yet tested end-to-end |
-| **Codex (OpenAI)** | Scaffolded | Config + role prompts ready; not yet tested end-to-end |
+GBaby works with any AI coding CLI. Use a proprietary one for quality, an open-source one for flexibility, or both.
 
-> **Honest status:** We're daily-driving this on Claude Code. The Gemini and Codex integrations use the same GBrain/Graphify/TurboQuant stack but the agent role wiring hasn't been battle-tested on those platforms yet.
+| CLI | License | Provider Lock-in? | GBaby Status | Best for |
+|---|---|---|---|---|
+| **[Claude Code](https://claude.ai/code)** | Proprietary | Claude only | **Actively tested** | Best reasoning, deep codebase understanding |
+| **[OpenCode](https://github.com/opencode-ai/opencode)** | Open source | Any (75+ providers) | Scaffolded | Interactive coding, any model, TUI |
+| **[Aider](https://github.com/Aider-AI/aider)** | Open source | Any (75+ providers) | Scaffolded | Git-first workflows, auto-commits |
+| **[Gemini CLI](https://github.com/google-gemini/gemini-cli)** | Open source | Gemini | Scaffolded | Google ecosystem |
+| **[Codex (OpenAI)](https://github.com/openai/codex)** | Open source | OpenAI | Scaffolded | OpenAI ecosystem |
+
+> **Honest status:** We're daily-driving this on Claude Code. The open-source CLI integrations (OpenCode, Aider) use the same GBrain/Graphify/TurboQuant stack but the agent role wiring hasn't been battle-tested yet.
 >
-> **Want to help test?** We'd love credit donations to run Gemini and Codex workloads. See [Tip Jar](#tip-jar) below — any contributions earmarked for "gemini testing" or "codex testing" go directly to API credits for validating those integrations.
+> **Want to help test?** We'd love credit donations to run workloads on other platforms. See [Tip Jar](#tip-jar) — contributions go directly to API credits for testing.
+
+### Why this matters: use GBaby with TurboQuant *today*
+
+With an open-source CLI like **OpenCode** or **Aider**, you can point GBaby at a self-hosted vLLM instance running TurboQuant — and get the full stack (compressed inference + knowledge graph + memory + agent roles) without paying a cent in API fees. Claude Code locks you to Anthropic's API; open-source CLIs let you bring your own model.
+
+## Provider Pricing Comparison
+
+Here's what it actually costs to use GBaby across different providers. Prices are per 1M tokens as of April 2026.
+
+### Frontier APIs (closed-source models)
+
+| Provider | Model | Input | Output | TurboQuant? | Notes |
+|---|---|---|---|---|---|
+| **Anthropic** | Claude Opus 4 | $5.00 | $25.00 | No | Best reasoning. Expensive. |
+| **Anthropic** | Claude Sonnet 4 | $3.00 | $15.00 | No | Sweet spot for most coding tasks |
+| **Anthropic** | Claude Haiku 4 | $0.25 | $1.25 | No | Fast, cheap, good for GStack sub-agents |
+| **Google** | Gemini 3.1 Pro | $2.00 | $12.00 | Not yet | Google *wrote* TurboQuant but hasn't deployed it |
+| **Google** | Gemini Flash-Lite | $0.10 | $0.40 | Not yet | 25x cheaper than Sonnet. Quality tradeoff. |
+| **OpenAI** | GPT-5.4 | $2.50 | $10.00 | No | |
+
+### Open-source model APIs (TurboQuant-ready)
+
+| Provider | Model | Input | Output | TurboQuant? | Notes |
+|---|---|---|---|---|---|
+| **Groq** | Llama 3.3 70B | $0.59 | $0.79 | Custom LPU | Fastest inference (800 tok/s). NVIDIA-acquired. |
+| **Groq** | Llama 3.1 8B | $0.05 | $0.08 | Custom LPU | Cheapest hosted option |
+| **Together AI** | Llama 3.3 70B | $0.88 | $0.88 | vLLM-based | TurboQuant as vLLM merges it |
+| **Fireworks** | Llama 3.3 70B | $0.90 | $0.90 | vLLM-based | 99.8% uptime |
+| **Together AI** | Llama 4 Maverick | $0.27 | $0.85 | vLLM-based | Newest Llama |
+
+### Self-hosted (TurboQuant now)
+
+| Setup | Model | Cost | TurboQuant? | Notes |
+|---|---|---|---|---|
+| **vLLM on H100** | Llama 70B | ~$0.18/M tok | **Yes** | 580 tok/s. Break-even at ~16M tok/day vs APIs. |
+| **vLLM on A100** | Llama 70B | ~$0.42/M tok | **Yes** | Still 60-80% cheaper than frontier APIs |
+| **llama.cpp** | Llama 70B | ~$0.10/M tok | **Yes (TQ3)** | 43K context on consumer GPUs |
+| **Ollama (local)** | Any GGUF | **$0.00** | Partial | Free. Runs on your laptop. 70-85% frontier quality. |
+
+### The GBaby multiplier
+
+These prices are *before* GBaby's savings kick in:
+
+- **Graphify** cuts tokens sent by 49-71x (read a 1.7K graph instead of 123K of raw files)
+- **GBrain** eliminates re-explanation across sessions (no more "let me re-read the whole codebase")
+- **TurboQuant** (self-hosted) compresses KV cache 6x, serving more concurrent users on same hardware
+
+**Example:** A typical Claude Sonnet coding session costs ~$0.50 in tokens. With Graphify alone, that drops to ~$0.01. Switch to self-hosted Llama 70B on vLLM with TurboQuant and Graphify? Effectively free.
+
+### Our recommendation
+
+| Scenario | Recommended setup | Monthly cost (heavy use) |
+|---|---|---|
+| **Best quality, don't care about cost** | Claude Code + Claude Sonnet + GBaby | ~$150-300/mo |
+| **Best quality, cost-conscious** | Claude Code + Claude Haiku + GBaby (Graphify cuts tokens 49x) | ~$10-30/mo |
+| **Open-source maximalist** | OpenCode/Aider + Groq Llama 70B + GBaby | ~$5-15/mo |
+| **Zero cost** | OpenCode/Aider + Ollama (local) + GBaby | **$0/mo** |
+| **Full TurboQuant stack** | OpenCode/Aider + self-hosted vLLM + TurboQuant + GBaby | GPU cost only (~$0.18/M tok) |
 
 ## Platform Support
 
