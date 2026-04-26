@@ -4,11 +4,60 @@
 
 > If Garry Tan had a baby with Google DeepMind... this is what that graph would look like.
 
-Four open-source projects. One stack. Your AI coding agent now has a brain (GBrain), eyes (Graphify), a team (GStack), and runs 90% cheaper (TurboQuant). All Rust + TypeScript. All local-first. All MIT.
+Four open-source projects. One stack. Two layers of optimization — **client-side** (what you send) and **server-side** (how it's processed). Use one or both.
 
 **The monster is alive.**
 
-> **Alpha stage.** GBaby is under active development and testing. Graphify and GBrain/GStack integration work today. The TurboQuant compression layer (gbaby-quant) is scaffolded with CUDA/Metal/CPU fallback but hasn't been battle-tested end-to-end yet — we're waiting on GPU credits and hardware access to put it through its paces. If you have a CUDA rig or Apple Silicon Mac and want to help test, [DM me](https://linkedin.com/in/saumyagarg) or see the [Tip Jar](#tip-jar) to donate API/GPU credits. Contributions of any kind welcome.
+> **Alpha stage.** GBaby is under active development and testing. The client-side stack (Graphify + GBrain + GStack) works today with any provider. The server-side compression layer (gbaby-quant / TurboQuant) is scaffolded with CUDA/Metal/CPU fallback but hasn't been battle-tested end-to-end yet — we're waiting on GPU credits and hardware access. If you have a CUDA rig or Apple Silicon Mac and want to help test, [DM me](https://linkedin.com/in/saumyagarg) or see the [Tip Jar](#tip-jar) to donate API/GPU credits. Contributions of any kind welcome.
+
+---
+
+## Two Layers of Optimization
+
+GBaby is a **client + server** optimization stack. You can run just the client side for massive savings with zero infrastructure changes, or add the server side for even more when you self-host.
+
+### Client-side (works with ANY provider today)
+
+These reduce what you *send*. No infrastructure changes. Works with Claude, DeepSeek, Kimi, Llama, Ollama — anything.
+
+| What | How | Impact |
+|---|---|---|
+| **Graphify** | Knowledge graph replaces raw file reads | **49-71x fewer tokens sent** — 123K drops to 1.7K |
+| **GBrain** | Persistent memory across sessions | **No re-reading** — the agent already knows your codebase, team, and decisions |
+| **GStack** | Specialized agent roles | **Smarter per token** — CEO/QA/eng-manager lens means less back-and-forth |
+
+**Client-side alone turns a $300/month AI coding habit into $6/month.** No GPU needed. No self-hosting. Just `npx gbaby setup` and point it at your existing provider.
+
+### Server-side (self-hosted only)
+
+This reduces what the *GPU uses internally*. Requires self-hosting (vLLM, RunPod, llama.cpp).
+
+| What | How | Impact |
+|---|---|---|
+| **TurboQuant** (gbaby-quant) | 3-bit KV cache compression inside GPU VRAM | **6x less GPU memory** — longer contexts on cheaper hardware |
+
+TurboQuant operates entirely inside the server's GPU memory. Your client sends normal tokens and gets normal tokens back — the compression is invisible. Cloud providers (Anthropic, Google, DeepSeek) could adopt it server-side at any time; when they do, you benefit automatically. To control it yourself, you self-host.
+
+### The full stack
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  CLIENT SIDE (works with any provider)                       │
+│                                                              │
+│  Graphify ── 49x fewer tokens sent                          │
+│  GBrain ──── persistent memory, no re-reading               │
+│  GStack ──── smarter per token, specialized roles           │
+│                                                              │
+│  Impact: $300/mo → $6/mo (same model, same provider)        │
+├─────────────────────────────────────────────────────────────┤
+│  SERVER SIDE (self-hosted vLLM / RunPod / llama.cpp)         │
+│                                                              │
+│  TurboQuant ── 6x KV cache compression in GPU VRAM          │
+│  gbaby-quant ── Rust crate, CUDA/Metal/CPU auto-detect      │
+│                                                              │
+│  Impact: 6x longer context, cheaper GPU tier, more users    │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ---
 
@@ -16,14 +65,7 @@ Four open-source projects. One stack. Your AI coding agent now has a brain (GBra
 
 A typical AI coding session reads ~123,000 tokens of raw files. At Claude Sonnet rates ($3/M), that's **$0.50 per session**. Do 20 sessions a day and you're burning **$300/month** just on context.
 
-GBaby attacks this at every layer:
-
-| What | How | Impact |
-|---|---|---|
-| **Graphify** | Knowledge graph replaces raw file reads | **49-71x fewer tokens sent** — 123K drops to 1.7K |
-| **GBrain** | Persistent memory across sessions | **No re-reading** — the agent already knows your codebase, team, and decisions |
-| **GStack** | Specialized agent roles | **Smarter per token** — CEO/QA/eng-manager lens means less back-and-forth |
-| **TurboQuant** | 3-bit KV cache compression | **6x less GPU memory** — longer contexts on cheaper hardware |
+**The client-side stack alone gets you 98% of the savings:**
 
 ### The open-source frontier is here
 
