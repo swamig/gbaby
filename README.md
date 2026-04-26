@@ -154,6 +154,22 @@ include = ["**/*.rs", "**/*.ts", "**/*.tsx", "**/*.py", "**/*.md"]
 └─────────────────────────────────────────────────┘
 ```
 
+## TurboQuant: Honest Status
+
+TurboQuant (ICLR 2026) is real, peer-reviewed, and works. But here's where it works *today* vs. where it's headed:
+
+| Environment | Works now? | Details |
+|---|---|---|
+| **Self-hosted models** (llama.cpp, vLLM, Ollama) | **Yes** | Community implementations landed within 48 hours of the paper. Triton kernels, CUDA, Metal, CPU paths all available. |
+| **Your own pipelines** (vector compression, embeddings) | **Yes** | `gbaby-quant` compresses vectors in your Rust backend right now. |
+| **Anthropic (Claude API)** | **Not yet** | No public announcement. They *can* adopt it (it's training-free, model-agnostic), but haven't said they have. |
+| **Google (Gemini API)** | **Not yet** | Google *wrote* the paper and mentions Gemini as a target use case, but hasn't deployed it to production. Official implementation expected Q2 2026. |
+| **OpenAI** | **Not yet** | No announcement. |
+
+**Why haven't cloud providers adopted it yet?** It just dropped (March 2026). The algorithm is training-free and model-agnostic — any provider could flip it on. But validating at billions-of-queries-per-day scale, on proprietary TPU/custom inference stacks, takes time. It's a matter of *when*, not *if*.
+
+**What this means for you:** GBaby's other three layers (Graphify token reduction, GBrain memory, GStack roles) deliver value *today* on any provider. When cloud providers adopt TurboQuant server-side, your API bills drop automatically — and the savings stack on top of what GBaby already saves you.
+
 ## Hardware Auto-Detection
 
 `gbaby-quant` picks the best compression backend at runtime:
