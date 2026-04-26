@@ -10,6 +10,21 @@ Four open-source projects. One stack. Your AI coding agent now has a brain (GBra
 
 ---
 
+## 30 Seconds to Alive
+
+```bash
+git clone https://github.com/swamig/gbaby.git && cd gbaby && npx gbaby setup
+```
+
+That's it. One command. It auto-detects your GPU (CUDA / Metal / CPU), builds the Rust compression layer, installs the knowledge graph, and scaffolds your brain. Works on Linux, macOS (Intel + Apple Silicon), and Windows.
+
+Verify:
+```bash
+npx gbaby doctor
+```
+
+---
+
 ## What's Inside
 
 | Layer | Project | What it does | Credit |
