@@ -87,24 +87,34 @@ Here's what it actually costs to use GBaby across different providers. Prices ar
 | **Google** | Gemini Flash-Lite | $0.10 | $0.40 | Not yet | 25x cheaper than Sonnet. Quality tradeoff. |
 | **OpenAI** | GPT-5.4 | $2.50 | $10.00 | No | |
 
-### Open-source model APIs (TurboQuant-ready)
+### Open-source model APIs
+
+> While OpenAI and Anthropic fight for paid subscribers, Chinese labs dropped
+> 3 open-source frontier models in 8 days — and they're building on each other's
+> work. Open source isn't behind anymore. Cheaper, faster, and shipping together.
 
 | Provider | Model | Input | Output | TurboQuant? | Notes |
 |---|---|---|---|---|---|
-| **Groq** | Llama 3.3 70B | $0.59 | $0.79 | Custom LPU | Fastest inference (800 tok/s). NVIDIA-acquired. |
-| **Groq** | Llama 3.1 8B | $0.05 | $0.08 | Custom LPU | Cheapest hosted option |
-| **Together AI** | Llama 3.3 70B | $0.88 | $0.88 | vLLM-based | TurboQuant as vLLM merges it |
-| **Fireworks** | Llama 3.3 70B | $0.90 | $0.90 | vLLM-based | 99.8% uptime |
+| **DeepSeek** | V4 Flash | **$0.14** | **$0.28** | On vLLM: Yes | **21x cheaper than Sonnet.** 1M context. Beats GPT-5.4. |
+| **DeepSeek** | V4 Pro | $1.74 | $3.48 | On vLLM: Yes | Largest open-weight model (1.1T). Frontier quality. |
+| **Moonshot** | Kimi K2.6 | $0.60 | $2.80 | On vLLM: Yes | #1 on SWE-Bench. Cache hits drop input to $0.10/M. |
+| **Groq** | Llama 3.3 70B | $0.59 | $0.79 | No (custom LPU) | Fastest inference (800 tok/s). NVIDIA-acquired. |
+| **Groq** | Llama 3.1 8B | $0.05 | $0.08 | No (custom LPU) | Cheapest hosted option |
+| **Together AI** | Llama 3.3 70B | $0.88 | $0.88 | vLLM-based | TurboQuant when vLLM merges it |
 | **Together AI** | Llama 4 Maverick | $0.27 | $0.85 | vLLM-based | Newest Llama |
+| **Fireworks** | Llama 3.3 70B | $0.90 | $0.90 | vLLM-based | 99.8% uptime |
 
 ### Self-hosted (TurboQuant now)
 
-| Setup | Model | Cost | TurboQuant? | Notes |
+| Setup | Model | Cost/M tok | TurboQuant? | Notes |
 |---|---|---|---|---|
-| **vLLM on H100** | Llama 70B | ~$0.18/M tok | **Yes** | 580 tok/s. Break-even at ~16M tok/day vs APIs. |
-| **vLLM on A100** | Llama 70B | ~$0.42/M tok | **Yes** | Still 60-80% cheaper than frontier APIs |
-| **llama.cpp** | Llama 70B | ~$0.10/M tok | **Yes (TQ3)** | 43K context on consumer GPUs |
-| **Ollama (local)** | Any GGUF | **$0.00** | Partial | Free. Runs on your laptop. 70-85% frontier quality. |
+| **vLLM on H200** | DeepSeek V4 Flash | ~$0.10 | **Yes** | Fits on single H200. 1M context. |
+| **vLLM on H100** | Llama 70B | ~$0.18 | **Yes** | 580 tok/s. Break-even at ~16M tok/day. |
+| **vLLM on 8xH100** | Kimi K2.6 | ~$0.30 | **Yes** | INT4 quantization: 4xH100 is enough. |
+| **vLLM on A100** | Llama 70B | ~$0.42 | **Yes** | Still 60-80% cheaper than frontier APIs |
+| **Consumer GPUs** | Qwen 3.6 27B | **~$0.01** | **Yes** | **Ties Claude 4.5 Opus. Runs on $800 of GPUs.** |
+| **llama.cpp** | Llama 70B | ~$0.10 | **Yes (TQ3)** | 43K context on consumer GPUs |
+| **Ollama (local)** | Any GGUF | **$0.00** | Partial | Free. Runs on your laptop. |
 
 ### The GBaby multiplier
 
@@ -112,9 +122,17 @@ These prices are *before* GBaby's savings kick in:
 
 - **Graphify** cuts tokens sent by 49-71x (read a 1.7K graph instead of 123K of raw files)
 - **GBrain** eliminates re-explanation across sessions (no more "let me re-read the whole codebase")
-- **TurboQuant** (self-hosted) compresses KV cache 6x, serving more concurrent users on same hardware
+- **TurboQuant** (self-hosted) compresses KV cache 6x — longer contexts, more concurrency, cheaper GPUs
 
-**Example:** A typical Claude Sonnet coding session costs ~$0.50 in tokens. With Graphify alone, that drops to ~$0.01. Switch to self-hosted Llama 70B on vLLM with TurboQuant and Graphify? Effectively free.
+**The math:**
+
+| Scenario | Base cost | + Graphify (49x fewer tokens) | + TurboQuant (6x KV compression) |
+|---|---|---|---|
+| Claude Sonnet session | ~$0.50 | ~$0.01 | N/A (cloud, no TQ yet) |
+| DeepSeek V4 Flash session | ~$0.02 | ~$0.0004 | On vLLM: even cheaper GPU |
+| Qwen 3.6 27B (local) | ~$0.001 | ~$0.00002 | Fits 6x longer context on same card |
+
+A frontier-quality coding session for **less than a thousandth of a cent.** That's the GBaby stack.
 
 ### Our recommendation
 
