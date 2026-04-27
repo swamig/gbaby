@@ -22,11 +22,11 @@ These reduce what you *send*. No infrastructure changes. Works with Claude, Deep
 
 | What | How | Impact |
 |---|---|---|
-| **Graphify** | Knowledge graph replaces raw file reads | **49-71x fewer tokens sent** — 123K drops to 1.7K |
+| **Graphify** | Knowledge graph replaces raw file reads | **8x avg, up to 49x on large repos** — reads the graph instead of raw files |
 | **GBrain** | Persistent memory across sessions | **No re-reading** — the agent already knows your codebase, team, and decisions |
 | **GStack** | Specialized agent roles | **Smarter per token** — CEO/QA/eng-manager lens means less back-and-forth |
 
-**Client-side alone turns a $300/month AI coding habit into $6/month.** No GPU needed. No self-hosting. Just `npx gbaby setup` and point it at your existing provider.
+**Client-side alone cuts your token bill by ~8x on average (up to 49x on large monorepos).** No GPU needed. No self-hosting. Just `npx gbaby setup` and point it at your existing provider.
 
 ### Server-side (self-hosted only)
 
@@ -65,7 +65,19 @@ TurboQuant operates entirely inside the server's GPU memory. Your client sends n
 
 A typical AI coding session reads ~123,000 tokens of raw files. At Claude Sonnet rates ($3/M), that's **$0.50 per session**. Do 20 sessions a day and you're burning **$300/month** just on context.
 
-**The client-side stack alone gets you 98% of the savings:**
+### Graphify token reduction: real benchmarks
+
+| Repo size | Measured reduction | Context |
+|---|---|---|
+| Large monorepo (27K+ files) | **Up to 49x** | Best case — agent reads ~15 files instead of thousands |
+| Mixed corpus (52 files) | **Up to 71x** | Code + papers + images, 1.7K tokens vs 123K naive |
+| Typical daily coding | **~8x average** | The realistic number for most projects |
+| Code reviews | **~6.8x** | Reviews touch more files than average tasks |
+| Small repos (< 10 files) | **~1x** | Everything fits in context anyway — minimal savings |
+
+Quality doesn't suffer: graph-assisted reviews scored **8.8/10** vs **7.2/10** for naive file reads. ([source](https://dev.to/emperorakashi20/how-code-review-graph-cuts-claude-code-token-usage-by-49x-and-whether-its-actually-worth-it-4kn1))
+
+### The actual math (using 8x average)
 
 ### The open-source frontier is here
 
@@ -97,16 +109,19 @@ Three Chinese labs dropped three frontier models in eight days. They're not "cat
 | Setup | Cost per session | Monthly (20/day) | vs. baseline |
 |---|---|---|---|
 | Claude Sonnet (raw) | $0.50 | $300 | — |
-| Claude Sonnet + Graphify | $0.01 | $6 | **98% cheaper** |
-| Claude Haiku + Graphify | $0.001 | $0.60 | **99.8% cheaper** |
-| Kimi K2.6 + Graphify | $0.0007 | $0.42 | **99.9% cheaper** |
-| DeepSeek V4 Flash + Graphify | $0.0004 | $0.24 | **99.9% cheaper** |
-| Llama 4 Maverick + Graphify | $0.0003 | $0.18 | **99.9% cheaper** |
-| Qwen 3.6 27B (local) + GBaby | $0.00002 | $0.01 | **~free** |
+| Claude Sonnet + Graphify (8x avg) | $0.06 | $37 | **88% cheaper** |
+| Claude Sonnet + Graphify (49x large repo) | $0.01 | $6 | **98% cheaper** |
+| Claude Haiku + Graphify (8x) | $0.005 | $3 | **99% cheaper** |
+| Kimi K2.6 + Graphify (8x) | $0.005 | $3 | **99% cheaper** |
+| DeepSeek V4 Flash + Graphify (8x) | $0.003 | $1.80 | **99.4% cheaper** |
+| Llama 4 Maverick + Graphify (8x) | $0.002 | $1.20 | **99.6% cheaper** |
+| Qwen 3.6 27B (local) + GBaby | $0.0001 | $0.06 | **~free** |
 
-That's not a typo on the last row. Two hundred-thousandths of a cent per session. A frontier-quality model that ties Claude 4.5 Opus, running on $800 of consumer GPUs, reading a knowledge graph instead of raw files.
+**The bottom line:** Using the **realistic 8x average**, GBaby turns a $300/month Claude Sonnet habit into ~$37/month. Switch to DeepSeek V4 Flash and it's $1.80/month. Run Qwen locally and it's pennies.
 
-**The bottom line:** GBaby turns a $300/month AI coding habit into a $6/month one on the same model — or effectively free if you go open-source. Kimi K2.6 beats Claude on real coding benchmarks for $0.0007/session. DeepSeek V4 matches GPT-5.4 on competitive programming for $0.0004/session. And Qwen runs on your laptop for nothing.
+On large monorepos (49x), those numbers drop further — $300/month becomes $6/month on Sonnet.
+
+And this is before GBrain's impact (no re-reading across sessions) and GStack's impact (fewer back-and-forth cycles). The 8x is just Graphify alone.
 
 And this is before TurboQuant is battle-tested. When the compression layer is validated, self-hosted setups get 6x more context on the same GPU — meaning the models that already run on your laptop will handle codebases 6x larger without upgrading hardware.
 
