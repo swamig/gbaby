@@ -20,13 +20,17 @@ GBaby is a **client + server** optimization stack. You can run just the client s
 
 These reduce what you *send*. No infrastructure changes. Works with Claude, DeepSeek, Kimi, Llama, Ollama — anything.
 
-| What | How | Impact |
-|---|---|---|
-| **Graphify** | Knowledge graph replaces raw file reads | **8x avg, up to 49x on large repos** — reads the graph instead of raw files |
-| **GBrain** | Persistent memory across sessions | **No re-reading** — the agent already knows your codebase, team, and decisions |
-| **GStack** | Specialized agent roles | **Smarter per token** — CEO/QA/eng-manager lens means less back-and-forth |
+| What | How | Impact | Required? |
+|---|---|---|---|
+| **Graphify** | Knowledge graph replaces raw file reads | **8x avg, up to 49x on large repos** — measurable, provable savings | **Core** — this is the main value driver |
+| **GBrain** | Persistent memory across sessions | Avoids re-explanation of decisions, people, architecture | Optional — add when you want cross-session institutional memory |
+| **GStack** | Specialized agent roles | CEO/QA/eng-manager lens means fewer back-and-forth cycles | Optional — add when you want multi-perspective reviews |
 
-**Client-side alone cuts your token bill by ~8x on average (up to 49x on large monorepos).** No GPU needed. No self-hosting. Just `npx gbaby setup` and point it at your existing provider.
+**Graphify alone cuts your token bill by ~8x average (up to 49x on large monorepos).** That's the core. No GPU needed. No self-hosting. Just `npx gbaby setup`.
+
+GBrain and GStack layer on top for teams and longer-running projects where context across sessions matters. They're Markdown files — zero overhead, add them when you need them.
+
+> **"Doesn't Claude Code already have session resume and memories?"** Yes. Graphify is different — it knows your *code structure* (dependencies, communities, complexity hotspots), not your conversation history. GBrain overlaps more with Claude's built-in memory, but it's platform-agnostic (works with OpenCode, Aider, Gemini, Codex too) and structured (templates for decisions, people, ideas vs. freeform memories).
 
 ### Server-side (self-hosted only)
 
